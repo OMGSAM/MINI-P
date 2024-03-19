@@ -57,7 +57,7 @@ def modifier():
         con.commit()
         con.close()
 
-        messagebox.showinfo("Patient Modifié")
+        
 
         # Update the selected row in the Treeview display
         table.item(selected_item, values=(matricule, nom, prenom, age, adresse, telephone, remarque))
@@ -65,9 +65,26 @@ def modifier():
 
 
 def supprimer():
+    # Get the selected item from the Treeview
     selected_item = table.selection()
+    
     if selected_item:
+        # Get the values of the selected row
+        values = table.item(selected_item, 'values')
+        matricule = values[0]  # Assuming 'matricule' is the primary key
+        
+        # Connect to the 'sbitar' database
+        con = sqlite3.connect('sbitar')
+        cuser = con.cursor()
+
+        # Delete the row from the database
+        cuser.execute("DELETE FROM kliyan WHERE matricule=?", (matricule,))
+        con.commit()
+        con.close()
+
+        # Remove the selected item from the Treeview
         table.delete(selected_item)
+
 
 
 
